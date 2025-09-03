@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4wtsyy7juwnn"]
+
+[ext_resource type="Texture2D" uid="uid://cn7vhce0nm335" path="res://assets/art/backgrounds/pitch-background.png" id="1_nnsk1"]
+
+[node name="World" type="Node2D"]
+
+[node name="Backgrounds" type="Node2D" parent="."]
+
+[node name="Grass" type="Sprite2D" parent="Backgrounds"]
+modulate = Color(0.517647, 0.803922, 0.164706, 1)
+texture = ExtResource("1_nnsk1")
+centered = false
