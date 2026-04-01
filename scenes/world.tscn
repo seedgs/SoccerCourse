@@ -11,6 +11,7 @@
 
 [node name="Grass" type="Sprite2D" parent="Backgrounds"]
 modulate = Color(0.517647, 0.803922, 0.164706, 1)
+scale = Vector2(0.98, 1)
 texture = ExtResource("1_nnsk1")
 centered = false
 
