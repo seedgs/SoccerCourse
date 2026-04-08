@@ -2,7 +2,11 @@ class_name Player
 
 extends CharacterBody2D
 
+const DURATION_TACKLE:= 170 # 设定铲球动画持续时间
+
 enum ControlScheme {CPU, P1, P2}
+
+enum State{MOVING, TACKLING}
 
 @export var control_scheme: ControlScheme
 
@@ -11,7 +15,12 @@ enum ControlScheme {CPU, P1, P2}
 @onready var animation_player: AnimationPlayer = %AnimationPlayer 
 
 @onready var player_sprite : Sprite2D = %PlayerSprite # player_sprite 被 “赋予” 节点 “Sprite”的 “2D”属性， 否则 player_sprite不可用
+
 var heading := Vector2.RIGHT
+
+var state := State.MOVING # 设定初始状态
+
+var time_start_tackle := Time.get_ticks_msec() # （给铲球动画的时间）返回引擎启动以来经过的时间
 
 
 # Called when the node enters the scene tree for the first time.
@@ -23,11 +32,21 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 
 	if control_scheme == ControlScheme.CPU: 
-		pass # 只有玩家按下物理键的时候， 电脑（cpu）才执行行动，否则原地不动
+		pass 
 	else:
-		handle_human_movement()
+		if state == State.MOVING:
+			handle_human_movement()
+			if velocity.x != 0 and KeyUtils.is_action_just_pressed(control_scheme, KeyUtils.Action.SHOOT): # 当人物移动（velocity.x 不等于0时） 和 按下“shoot”按键时， 启动铲球动作
+				state = State.TACKLING
+				time_start_tackle = Time.get_ticks_msec()
+			set_movement_animation()
+		elif state == State.TACKLING:
+			animation_player.play("tackle")
+			if Time.get_ticks_msec() - time_start_tackle > DURATION_TACKLE: # 铲球动画持续时间（经过 DURATION_TACKLE 设定的时候后变回移动状态）
+				state = State.MOVING
 
-	set_movement_animation()
+
+	
 
 	move_and_slide()
 
@@ -75,7 +94,7 @@ func set_heading() -> void: # 人物方向设定
 func flip_sprite() -> void: # 人物转向
 
 	if heading == Vector2.RIGHT:
-		player_sprite.flip_h = false # 这里 player_sprite 也可以换成 “$PlayerSprite” 
+		player_sprite.flip_h = false # 这里 player_sprite 也可以换成 “$PlayerSprite”  
 	elif heading == Vector2.LEFT:
 		player_sprite.flip_h = true
 
