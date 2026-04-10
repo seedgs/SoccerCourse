@@ -1,9 +1,7 @@
 class_name Player
 
 extends CharacterBody2D
-
-const DURATION_TACKLE:= 170 # 设定铲球动画持续时间
-
+ 
 enum ControlScheme {CPU, P1, P2}
 
 enum State{MOVING, TACKLING}
@@ -16,11 +14,16 @@ enum State{MOVING, TACKLING}
 
 @onready var player_sprite : Sprite2D = %PlayerSprite # player_sprite 被 “赋予” 节点 “Sprite”的 “2D”属性， 否则 player_sprite不可用
 
+
+var current_state: PlayerState = null
+
 var heading := Vector2.RIGHT
+
+var state_factory := PlayerStateFactory.new() 
 
 var state := State.MOVING # 设定初始状态
 
-var time_start_tackle := Time.get_ticks_msec() # （给铲球动画的时间）返回引擎启动以来经过的时间
+
 
 
 # Called when the node enters the scene tree for the first time.
