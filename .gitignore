@@ -1,3 +1,5 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+scenes/characters/character_states/player_states.gd.uid
+scenes/characters/character_states/player_state.gd.rej

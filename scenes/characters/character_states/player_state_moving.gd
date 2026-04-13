@@ -9,8 +9,7 @@ func _process(_delta: float) -> void:
 		pass 
 	else:
 		handle_human_movement()
-		print("00")
-
+		
 	player.set_movement_animation()
 
 	player.set_heading()

@@ -10,7 +10,7 @@ var time_start_tackle := Time.get_ticks_msec() # （给铲球动画的时间）�
 
 
 func _enter_tree() -> void:
-	animation_player.player("tackle")
+	animation_player.play("tackle")
 	time_start_tackle = Time.get_ticks_msec()
 
 func _process(_delta: float) -> void:

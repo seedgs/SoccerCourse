@@ -44,11 +44,11 @@ func _process(_delta: float) -> void:
 func switch_state(state: State) -> void:
 	if current_state != null:
 		current_state.queue_free()
-		current_state = state_factory.get_fresh_state(state)
-		current_state.steup(self, animation_player) # self为 player
-		current_state.state_transition_requested.connect(switch_state.bind())
-		current_state.name = "PlayerStateMachine: " + str(state)
-		call_deferred("add_child", current_state)
+	current_state = state_factory.get_fresh_state(state)
+	current_state.steup(self, animation_player) # self为 player
+	current_state.state_transition_requested.connect(switch_state.bind())
+	current_state.name = "PlayerStateMachine: " + str(state)
+	call_deferred("add_child", current_state)
 		
 
 
