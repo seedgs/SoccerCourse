@@ -6,6 +6,7 @@ func _init() -> void: # 添加状态字典（人物的各种状态）
 	states = {
 		Player.State.MOVING: PlayerStateMoving,
 		Player.State.TACKLING: PlayerStateTackling,
+		Player.State.RECOVERING: PlayerStateRecovering,
 	}
 
 func get_fresh_state(state: Player.State) -> PlayerState:

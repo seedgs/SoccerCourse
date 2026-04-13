@@ -1,6 +1,6 @@
 class_name PlayerStateTackling
 
-extends PlayerState
+extends PlayerState # 继承玩家状态
 
 
 const DURATION_TACKLE:= 170 # 设定铲球动画持续时间
@@ -14,5 +14,5 @@ func _enter_tree() -> void:
 	time_start_tackle = Time.get_ticks_msec()
 
 func _process(_delta: float) -> void:
-	if Time.get_ticks_msec() - time_start_tackle > DURATION_TACKLE: # 在铲球状态停留足够的时间，“是”就回到 “移动”， “否”就继续铲球状态
-		state_transition_requested.emit(Player.State.MOVING)
+	if Time.get_ticks_msec() - time_start_tackle > DURATION_TACKLE: # 当进入铲球动画后！ 经过设置的差球时间后
+		state_transition_requested.emit(Player.State.RECOVERING) # 去到 “恢复” 状态

@@ -4,7 +4,7 @@ extends CharacterBody2D
  
 enum ControlScheme {CPU, P1, P2}
 
-enum State {MOVING, TACKLING}
+enum State {MOVING, TACKLING, RECOVERING}
 
 @export var control_scheme: ControlScheme
 
