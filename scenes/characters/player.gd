@@ -4,7 +4,7 @@ extends CharacterBody2D
  
 enum ControlScheme {CPU, P1, P2}
 
-enum State{MOVING, TACKLING}
+enum State {MOVING, TACKLING}
 
 @export var control_scheme: ControlScheme
 
@@ -19,20 +19,18 @@ var current_state: PlayerState = null
 
 var heading := Vector2.RIGHT
 
-var state_factory := PlayerStateFactory.new() 
-
-var state := State.MOVING # 设定初始状态
-
+var state_factory := PlayerStateFactory.new()  
 
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	switch_state(State.MOVING)  
 
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(_delta: float) -> void:
+func _process(_delta: float) -> void:
 
 	move_and_slide()
 
@@ -41,6 +39,16 @@ func _physics_process(_delta: float) -> void:
 	flip_sprite()
 
 	
+
+
+func switch_state(state: State) -> void:
+	if current_state != null:
+		current_state.queue_free()
+		current_state = state_factory.get_fresh_state(state)
+		current_state.steup(self, animation_player) # self为 player
+		current_state.state_transition_requested.connect(switch_state.bind())
+		current_state.name = "PlayerStateMachine: " + str(state)
+		call_deferred("add_child", current_state)
 		
 
 
@@ -59,9 +67,10 @@ func set_movement_animation() -> void: # 人物动画状态
 
 # 这个方法是根据 “二维向量” 的，所以不出现控制 “P1”，导致 “P2” 会格个跟随 “反应”
 func set_heading() -> void: # 人物方向设定
-
+	
 	if velocity.x > 0: # 当人物X轴方向大于0（也就是人物向右移动）
 		heading = Vector2.RIGHT # heading 被赋予 二维向量（1，0）
+		
 	elif velocity.x < 0: # 当人物X轴方向小于0（也就是人物向左移动）
 		heading = Vector2.LEFT # heading 被赋予 二维向量（-1，0）
 	
