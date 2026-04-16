@@ -1,14 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3tyogrdb3mde"]
+[gd_scene load_steps=10 format=3 uid="uid://b3tyogrdb3mde"]
 
 [ext_resource type="Texture2D" uid="uid://bnw2li0dnd817" path="res://assets/art/props/soccer-ball.png" id="1_7s4qf"]
+[ext_resource type="Script" uid="uid://bwlragqujiotk" path="res://scenes/ball/ball.gd" id="1_f7cbr"]
 [ext_resource type="Texture2D" uid="uid://te12k4nh80ea" path="res://assets/art/props/ball-shadow.png" id="2_cxlvu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7s4qf"]
 radius = 5.0
 
-[sub_resource type="Animation" id="Animation_7s4qf"]
-resource_name = "idle"
-loop_mode = 1
+[sub_resource type="Animation" id="Animation_cxlvu"]
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -22,8 +22,9 @@ tracks/0/keys = {
 "values": [0]
 }
 
-[sub_resource type="Animation" id="Animation_cxlvu"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_7s4qf"]
+resource_name = "idle"
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -67,6 +68,7 @@ radius = 4.0
 
 [node name="Ball" type="AnimatableBody2D"]
 collision_layer = 4
+script = ExtResource("1_f7cbr")
 
 [node name="BallSprite" type="Sprite2D" parent="."]
 rotation = 0.00173077
@@ -92,6 +94,7 @@ centered = false
 offset = Vector2(-8, -16)
 
 [node name="PlayerDetectionArea" type="Area2D" parent="."]
+unique_name_in_owner = true
 position = Vector2(0, -5)
 rotation = -0.00254586
 collision_layer = 0

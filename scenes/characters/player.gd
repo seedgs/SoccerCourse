@@ -15,7 +15,7 @@ enum State {MOVING, TACKLING, RECOVERING}
 @onready var player_sprite : Sprite2D = %PlayerSprite # player_sprite 被 “赋予” 节点 “Sprite”的 “2D”属性， 否则 player_sprite不可用
 
 
-var current_state: PlayerState = null # 当前节点
+var current_state: PlayerState = null # 玩家当前状态的引用
 
 var heading := Vector2.RIGHT
 
@@ -41,14 +41,14 @@ func _process(_delta: float) -> void:
 	
 
 
-func switch_state(state: State) -> void:
+func switch_state(state: Player.State) -> void:
 	if current_state != null:
 		current_state.queue_free() # 现有状态存在就销毁它
 	current_state = state_factory.get_fresh_state(state) # 从“player_state_facyory”获取get_fresh_state() 方法，并传入状态
 	current_state.steup(self, animation_player) # self为 player
 	current_state.state_transition_requested.connect(switch_state.bind()) # 接收信号，并绑定
 	current_state.name = "PlayerStateMachine: " + str(state)
-	call_deferred("add_child", current_state) # 把 switch_state()添加为子对象，并延迟调用
+	call_deferred("add_child", current_state) # 把 switch_state()添加为子对象，并延迟调用！
 		
 
 

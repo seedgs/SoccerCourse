@@ -13,3 +13,4 @@ func get_fresh_state(state: Player.State) -> PlayerState: # 传入一个玩家�
 	assert(states.has(state), "state dosen't exist!") # assert(1, 2)方法是: 如果判断 1 是 “否”， 则 返回 “2”（“2”可以是字符串）
 	return states.get(state).new() # 上面assert(1, 2)，已经判断 “1” 是 否， 就返回（return）， 获取（.get()） 从字典中获取 类，创建新实例（.new()）
 	# 可以通过每次使用“player_state_factory”， 请求一个新的状态对象
+ 
