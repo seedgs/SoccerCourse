@@ -17,7 +17,7 @@ enum State {MOVING, TACKLING, RECOVERING}
 
 var current_state: PlayerState = null # 玩家当前状态的引用
 
-var heading := Vector2.RIGHT
+var heading := Vector2.RIGHT # 设 玩家的默认朝向为 右 
 
 var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory”， 并创建新实例
 

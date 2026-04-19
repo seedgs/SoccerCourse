@@ -6,9 +6,31 @@ func _enter_tree() -> void:
 	assert(carried != null) 
 
 
-func _process(_delta: float) -> void:
+const OFFSET_FORM_PLAYER := Vector2(12, 2) # 球在携带状态下的偏移量
+
+const DRIBBLE_FREQUENCY := 15.0 # 振幅（左右摇摆的快慢）
+
+const DRIBBLE_INTENSITY := 4.0 # 强度 （左右摇摆的跨度）
+
+var dribble_time := 0.0
+
+
+func _process(delta: float) -> void:
+
+	var vx := 0.0
+	dribble_time += delta
+	if carried.velocity.x != 0 : # 左右移动时，球 来回摆动
+		vx = cos(dribble_time * DRIBBLE_FREQUENCY) * DRIBBLE_INTENSITY # cos值是随时间推移来震荡的！
+	elif carried.velocity.y == 0: # 上下移动时，球 停止摆动
+		vx = 1.0
+	if carried.velocity.x != 0 and carried.velocity.y != 0: # 对角线移动时，球停止移动
+		vx = 1.0
+	
+	ball.ball_state_animation()
+	# print("x:", carried.velocity.x, "   y:", carried.velocity.y)
 
 	# 如果“ball_state_freeform.gd” 中的 “on_player_enter()” 方法中的 “ball.carried = body”去掉
 	# 代码 无法 判断 是 “谁” 拿到球， 就无法执行下面这 球跟随人的代码！！！
-
-	ball.position = ball.carried.position # 当玩家进入携带区域后， 球的位置就是人的位置（稍微在人的位置偏前一点点）
+	# 当玩家进入携带区域后， 球的位置就是人的位置（稍微在人的位置偏前一点点）
+	# ""carried.heading.x" 人物在左右移动时，保持 球 与 人物 同向
+	ball.position = ball.carried.position + Vector2(vx + carried.heading.x * OFFSET_FORM_PLAYER.x, OFFSET_FORM_PLAYER.y)
