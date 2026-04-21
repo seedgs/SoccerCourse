@@ -5,8 +5,10 @@ var states : Dictionary
 func _init() -> void: # 添加状态字典（人物的各种状态）
 	states = {
 		Player.State.MOVING: PlayerStateMoving,
-		Player.State.TACKLING: PlayerStateTackling,
+		Player.State.PREPPING_SHOT: PlayerStatePreppingShot,
 		Player.State.RECOVERING: PlayerStateRecovering,
+		Player.State.SHOOTING: PlayerStateShooting,
+		Player.State.TACKLING: PlayerStateTackling,
 	}
 
 func get_fresh_state(state: Player.State) -> PlayerState: # 传入一个玩家状态，并返回一个玩家状态（这里是各种状态：包括 “铲球”、“移动” 等）

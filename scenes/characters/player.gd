@@ -4,13 +4,17 @@ extends CharacterBody2D
  
 enum ControlScheme {CPU, P1, P2}
 
-enum State {MOVING, TACKLING, RECOVERING}
+enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING}
 
-@export var control_scheme: ControlScheme
+@export var ball : Ball
 
-@export var speed: float
+@export var control_scheme: ControlScheme # 角色控制归属选择（P1, P2, CPU）
 
-@onready var animation_player: AnimationPlayer = %AnimationPlayer 
+@export var speed: float # 玩家速度
+
+@export var power: float # 角色射门的能力数值
+
+@onready var animation_player: AnimationPlayer = %AnimationPlayer # 获取Player节点下的 AnimationPlayer节点
 
 @onready var player_sprite : Sprite2D = %PlayerSprite # player_sprite 被 “赋予” 节点 “Sprite”的 “2D”属性， 否则 player_sprite不可用
 
@@ -24,13 +28,13 @@ var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory�
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func _ready() -> void: 
 	switch_state(State.MOVING)  
 
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _process(_delta: float) -> void: # ( )内的 “delta” 如果前面有 “_” 代表此方法的 “delta” 数值被使用，如果 “delta” 没被使用，“_” 应该被加上！
 
 	move_and_slide()
 
@@ -63,8 +67,6 @@ func set_movement_animation() -> void: # 人物动画状态
 
 
 
-
-
 # 这个方法是根据 “二维向量” 的，所以不出现控制 “P1”，导致 “P2” 会格个跟随 “反应”
 func set_heading() -> void: # 人物方向设定
 	
@@ -82,6 +84,8 @@ func flip_sprite() -> void: # 人物转向
 		player_sprite.flip_h = true
 
 
+func has_ball() -> bool: # 检查玩家是否持有球！
+	return ball.carried == self # 返回 “球” 的 “持有者” 也就是 “玩家自己”!
 
 # 这个方法的弊端就是，按下左右按键，系统无法判断是来自 “P1” 还是 “P2”
 # func player_direction() -> void: # 人物转向

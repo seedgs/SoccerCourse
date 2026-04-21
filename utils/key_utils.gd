@@ -26,7 +26,7 @@ const ACTIONS_MAP : Dictionary = {
 	},
 }
 
-func get_input_vector(scheme: Player.ControlScheme) -> Vector2: # 创建人物控制的方法（当按下）
+func get_input_vector(scheme: Player.ControlScheme) -> Vector2: # 获取 玩家 按下的按键
 	var map : Dictionary = ACTIONS_MAP[scheme]
 	return Input.get_vector(map[Action.LEFT], map[Action.RIGHT], map[Action.UP], map[Action.DOWN])
 
