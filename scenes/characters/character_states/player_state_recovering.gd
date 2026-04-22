@@ -16,4 +16,4 @@ func _enter_tree() -> void:
 
 func _process(_delta: float) -> void:
 	if Time.get_ticks_msec() - time_start_recovering > DURATION_RECOVERING: # 当进入恢复动画后！ 经过设置的恢复时间后
-		state_transition_requested.emit(Player.State.MOVING)    # 去到 “移动” 状态
+		transition_state(Player.State.MOVING)    # 去到 “移动” 状态

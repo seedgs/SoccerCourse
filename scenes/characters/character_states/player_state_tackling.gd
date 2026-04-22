@@ -22,7 +22,7 @@ func _process(delta: float) -> void:
 			is_tackle_complete = true # 铲球完成为 “是”
 			time_finish_tackle = Time.get_ticks_msec() # 开始计时
 	elif Time.get_ticks_msec() - time_finish_tackle > GURATION_PRIOR_RECOVERY: # 当进入铲球动画后！ 经过设置的差球时间后
-		state_transition_requested.emit(Player.State.RECOVERING) # 去到 “恢复” 状态
+		transition_state(Player.State.RECOVERING) # 去到 “恢复” 状态
 
 
 

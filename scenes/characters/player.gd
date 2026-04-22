@@ -45,11 +45,11 @@ func _process(_delta: float) -> void: # ( )内的 “delta” 如果前面有 �
 	
 
 
-func switch_state(state: Player.State) -> void:
+func switch_state(state: Player.State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
 	if current_state != null:
 		current_state.queue_free() # 现有状态存在就销毁它
 	current_state = state_factory.get_fresh_state(state) # 从“player_state_facyory”获取get_fresh_state() 方法，并传入状态
-	current_state.steup(self, animation_player) # self为 player
+	current_state.steup(self, state_data, animation_player) # self为 player
 	current_state.state_transition_requested.connect(switch_state.bind()) # 接收信号，并绑定
 	current_state.name = "PlayerStateMachine: " + str(state)
 	call_deferred("add_child", current_state) # 把 switch_state()添加为子对象，并延迟调用！
@@ -86,6 +86,15 @@ func flip_sprite() -> void: # 人物转向
 
 func has_ball() -> bool: # 检查玩家是否持有球！
 	return ball.carried == self # 返回 “球” 的 “持有者” 也就是 “玩家自己”!
+
+
+func on_animation_complete() -> void: # 这个方法在 父节点 Player 的 “AnimationPlayer” 子节点下的任意一个动画下 “插入关键帧” ！
+	if current_state != null: 
+
+		# 第一步：执行动画 完 状态，触发关键帧后来到这里！
+		# 第二步：on_animation_complete()被 “PlayerState.gd” 监听！ 
+		# 第三步：“PlayerState.gd” 里的 “on_animation_complete()” 被调用的其他状态监听 并 重写内容！
+		current_state.on_animation_complete() 
 
 # 这个方法的弊端就是，按下左右按键，系统无法判断是来自 “P1” 还是 “P2”
 # func player_direction() -> void: # 人物转向

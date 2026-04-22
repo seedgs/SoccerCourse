@@ -25,11 +25,10 @@ func handle_human_movement() -> void: #人物操控
 
 	# 如果 玩家 持球 且 按下 射门按钮，玩家 进入准备射门状态！
 	if player.has_ball() and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
-		state_transition_requested.emit(player.State.PREPPING_SHOT)
+		transition_state(player.State.PREPPING_SHOT)
 
 
 	# 如果 玩家 速度不为 0 且 按下 铲球 按钮，玩家 进入 铲球状态！
 	if player.velocity != Vector2.ZERO and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
-		state_transition_requested.emit(Player.State.TACKLING)
+		transition_state(Player.State.TACKLING)
  
-
