@@ -14,4 +14,4 @@ func on_animation_complete() -> void: # 玩家射门状态的 “脚本” 调�
 	shoot_ball()
 
 func shoot_ball() -> void:
-	print(state_data)
+	ball.shoot(state_data.shot_direction * state_data.shot_power)

@@ -25,5 +25,6 @@ func _process(delta: float) -> void:
 		var bonus := ease(ease_time, EASE_PRWARD_FACTOR) # 蓄力若干时间后， 玩家射门的力度 （这个力度是曲线图：当 “EASE_PRWARD_FACTOR = 1” 时，你按压射击的时间与力度相同；当 “EASE_PRWARD_FACTOR > 1” 时, 你按压的射击的时间越 “长”，你射门力度越大；当 “EASE_PRWARD_FACTOR < 1” 时,你按压的射击的时间越 “短”，你射门的力度越大）
 		var shot_power := player.power * (1 + bonus) # 玩家的 射击力度 = 角色射门的能力数值 * (1 + 玩家的射门力度)
 		shot_direction = shot_direction.normalized() # 玩家的射门方向 = 模长的单位向量 (单位时间内的按键坐标和(按键坐标1(x1, y1), 按键坐标2(x2, y2),按键单位时间:n1 和 n2，单位时间内的按键坐标:n1(x1, y1) + n2(x2, y2)) / 模长 (可上网搜 “模长公式”))
-		#print(shot_direction, shot_power)  
-		transition_state(Player.State.SHOOTING, state_data) # 如果 “state_data” 报错，可以在 “player_state.gd” 的 “setup()” 设置正确的参数，“player.gd” 的 “switch_state()” 也要传递参数！
+		#print(shot_direction, shot_power)
+		var data = PlayerStateData.build().set_shot_direction(shot_direction).set_shot_power(shot_power)  # 调用 “PlayerStateData.gd” 的 “build()” 方法的数据
+		transition_state(Player.State.SHOOTING, data) # 如果 “state_data” 报错，可以在 “player_state.gd” 的 “setup()” 设置正确的参数，“player.gd” 的 “switch_state()” 也要传递参数！

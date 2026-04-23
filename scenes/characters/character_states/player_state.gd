@@ -11,13 +11,17 @@ var player : Player = null # 这里 “player” 是一个引用，目的是通�
 
 var state_data : PlayerStateData = PlayerStateData.new()
 
-func steup(context_player: Player, context_data: PlayerStateData, context_animation_player: AnimationPlayer) -> void: # 创建一个设置方法（"setup()"），分别传入参数
+var ball : Ball = null
+
+func steup(context_player: Player, context_data: PlayerStateData, context_animation_player: AnimationPlayer, context_ball: Ball) -> void: # 创建一个设置方法（"setup()"），分别传入参数
 
 	player = context_player
 
 	animation_player = context_animation_player
 
 	state_data = context_data
+
+	ball = context_ball
 
 # 这个方法 可以使 “state_transition_requested.emit()” 直接变成 “trainsition_state()” 被调用
 # 这个方法也包括可以使用 “trainsition_state()” 内的参数，只要在 “signal state_transition_requested()” 内设置参数即可

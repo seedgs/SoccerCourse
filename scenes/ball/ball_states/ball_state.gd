@@ -10,10 +10,14 @@ var ball : Ball = null # 声明球本身（使其可以给其他脚本使用）
 var carried : Player = null # 声明携带 为 “玩家” 
 var player_direction_area : Area2D = null # 声明球下的子节点 —— Area2D 
 var animation_player : AnimationPlayer = null 
+var sprite_ball : Sprite2D = null
+var sprite_shadow : Sprite2D = null
 
 # 设置声明的参数
-func setup(context_ball: Ball, context_player_direction_area: Area2D, context_carried: Player, context_animation: AnimationPlayer) -> void:
+func setup(context_ball: Ball, context_player_direction_area: Area2D, context_carried: Player, context_animation: AnimationPlayer, context_sprite_ball: Sprite2D, context_sprite_shadow: Sprite2D) -> void:
 	ball = context_ball
 	player_direction_area = context_player_direction_area
 	carried = context_carried
 	animation_player = context_animation
+	sprite_ball = context_sprite_ball
+	sprite_shadow = context_sprite_shadow

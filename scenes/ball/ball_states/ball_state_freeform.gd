@@ -10,6 +10,6 @@ func on_player_enter(body: Player) -> void:
 
 	# 记录谁拿球！（当前为玩家！！！）
 	ball.carried = body # 如果去掉这个，ball_state_carried.gd 中 “ball.position = ball.carried.position（当球为携带状态时，球 与 玩家的位置是一致的）” 检测不出 玩家，就会报错！！！
-
+	
 	state_transition_requested.emit(Ball.State.CARRIED) # 发送 ball_state.gd里面的 “CARRIED”
  

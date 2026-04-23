@@ -6,7 +6,13 @@ enum State {CARRIED, FREEFORM, SHOT} # 枚举 球 的状态
 
 @onready var player_direction_area : Area2D = %PlayerDetectionArea # 获取区域的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
 
+@onready var ball_sprite : Sprite2D = %BallSprite # （注意调用的名称）获取精灵节点的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
+
+@onready var ball_shadow_sprite : Sprite2D = %ShadowSprite # （注意调用的名称）获取精灵节点的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
+
 @onready var animation_player : AnimationPlayer = %AnimationPlayer # 获取动画播放器的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
+
+
 
 var carried : Player = null
 var current_state : BallState = null # 球当前状态的引用
@@ -24,7 +30,7 @@ func switch_state(state: Ball.State) -> void:
 	if current_state != null: # 如果球的当前状态 不为 null
 		current_state.queue_free() # 清除当前状态
 	current_state = state_factory.get_fresh_state(state) # 创建 “新” 状态
-	current_state.setup(self, player_direction_area, carried, animation_player) # 传入状态数据
+	current_state.setup(self, player_direction_area, carried, animation_player, ball_sprite, ball_shadow_sprite) # 传入状态数据
 	current_state.state_transition_requested.connect(switch_state.bind()) # 球 收到 信号
 	current_state.name = "BallStateMachine"
 	call_deferred("add_child", current_state)
@@ -40,3 +46,9 @@ func ball_state_animation() -> void:
 			animation_player.advance(0)
 	else:
 		animation_player.play("idle") # 播放球的静止动画
+
+
+func shoot(shot_virection: Vector2) -> void:
+	velocity = shot_virection
+	carried = null
+	switch_state(Ball.State.SHOT)
