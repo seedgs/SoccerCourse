@@ -67,6 +67,7 @@ _data = {
 radius = 5.0
 
 [node name="Ball" type="AnimatableBody2D"]
+scale = Vector2(1.00304, 0.988506)
 collision_layer = 4
 sync_to_physics = false
 script = ExtResource("1_f7cbr")
@@ -74,6 +75,7 @@ script = ExtResource("1_f7cbr")
 [node name="BallSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 rotation = 0.00173077
+skew = 0.0174533
 texture = ExtResource("1_7s4qf")
 centered = false
 offset = Vector2(-5, -10)

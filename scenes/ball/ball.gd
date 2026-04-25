@@ -16,6 +16,8 @@ enum State {CARRIED, FREEFORM, SHOT} # 枚举 球 的状态
 
 var carried : Player = null
 var current_state : BallState = null # 球当前状态的引用
+var height := 0.0
+var height_velocity := 0.0
 var state_factory := BallStateFactory.new() # 实例化 ball_state_factory.gd
 var velocity := Vector2.ZERO # 球的 速度初始为 0
 
@@ -23,6 +25,10 @@ var velocity := Vector2.ZERO # 球的 速度初始为 0
 
 func _ready() -> void:
 	switch_state(State.FREEFORM) # 球的状态一开始是 “自由状态”
+
+
+func _process(_delta: float) -> void:
+	ball_sprite.position = Vector2.UP * height
 
 
 
@@ -49,6 +55,6 @@ func ball_state_animation() -> void:
 
 
 func shoot(shot_virection: Vector2) -> void:
-	velocity = shot_virection
-	carried = null
-	switch_state(Ball.State.SHOT)
+	velocity = shot_virection # 这里的 velocity 数值 其实就是  “player_state_shooting.gd” 的 “shoot_ball()” 方法的 state_data.shot_direction * state_data.shot_power 的数值！
+	carried = null # 当球射出去后， 携带者（触碰者）为 null（可以理解为在空中！）
+	switch_state(Ball.State.SHOT) # 转为 球的 射击状态，也就是转去 对应的 “ball_state_shot.gd”

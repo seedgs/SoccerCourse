@@ -37,3 +37,6 @@ func on_animation_complete() -> void: # 此处的方法 为空， 任何状态�
 	player = a
 
 	animation_player = b """
+
+
+
