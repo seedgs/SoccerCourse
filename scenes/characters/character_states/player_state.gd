@@ -13,15 +13,21 @@ var state_data : PlayerStateData = PlayerStateData.new()
 
 var ball : Ball = null
 
-func steup(context_player: Player, context_data: PlayerStateData, context_animation_player: AnimationPlayer, context_ball: Ball) -> void: # 创建一个设置方法（"setup()"），分别传入参数
+var teammate_detection_area : Area2D = null
 
-	player = context_player
+func steup(context_animation_player: AnimationPlayer, context_ball: Ball, context_player: Player, context_data: PlayerStateData, conetxt_teammate_detection_area: Area2D) -> void: # 创建一个设置方法（"setup()"），分别传入参数
 
 	animation_player = context_animation_player
 
+	ball = context_ball
+
+	player = context_player
+
 	state_data = context_data
 
-	ball = context_ball
+	teammate_detection_area = conetxt_teammate_detection_area
+
+	
 
 # 这个方法 可以使 “state_transition_requested.emit()” 直接变成 “trainsition_state()” 被调用
 # 这个方法也包括可以使用 “trainsition_state()” 内的参数，只要在 “signal state_transition_requested()” 内设置参数即可

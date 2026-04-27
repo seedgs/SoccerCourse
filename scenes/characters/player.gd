@@ -4,7 +4,7 @@ extends CharacterBody2D
  
 enum ControlScheme {CPU, P1, P2}
 
-enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING}
+enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING}
 
 @export var ball : Ball
 
@@ -17,6 +17,8 @@ enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING}
 @onready var animation_player: AnimationPlayer = %AnimationPlayer # 获取Player节点下的 AnimationPlayer节点
 
 @onready var player_sprite : Sprite2D = %PlayerSprite # player_sprite 被 “赋予” 节点 “Sprite”的 “2D”属性， 否则 player_sprite不可用
+
+@onready var teammate_detection_area : Area2D = %TeammateDetectionArea
 
 
 var current_state: PlayerState = null # 玩家当前状态的引用
@@ -42,14 +44,13 @@ func _process(_delta: float) -> void: # ( )内的 “delta” 如果前面有 �
 	
 	flip_sprite()
 
-	
 
 
 func switch_state(state: Player.State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
 	if current_state != null:
 		current_state.queue_free() # 现有状态存在就销毁它
 	current_state = state_factory.get_fresh_state(state) # 从“player_state_facyory”获取get_fresh_state() 方法，并传入状态
-	current_state.steup(self, state_data, animation_player, ball) # (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
+	current_state.steup(animation_player, ball, self, state_data, teammate_detection_area) # (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
 	current_state.state_transition_requested.connect(switch_state.bind()) # 接收信号，并绑定
 	current_state.name = "PlayerStateMachine: " + str(state)
 	call_deferred("add_child", current_state) # 把 switch_state()添加为子对象，并延迟调用！

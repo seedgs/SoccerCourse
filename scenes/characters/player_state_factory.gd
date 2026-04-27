@@ -5,6 +5,7 @@ var states : Dictionary
 func _init() -> void: # 添加状态字典（人物的各种状态）
 	states = {
 		Player.State.MOVING: PlayerStateMoving,
+		Player.State.PASSING: PlayerStatePassing,
 		Player.State.PREPPING_SHOT: PlayerStatePreppingShot,
 		Player.State.RECOVERING: PlayerStateRecovering,
 		Player.State.SHOOTING: PlayerStateShooting,

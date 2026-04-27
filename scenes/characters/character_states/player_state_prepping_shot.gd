@@ -16,6 +16,7 @@ func _enter_tree() -> void:
 	animation_player.play("prep_kick") # 进入 “准备射击” 状态后， 进入 “射击动画”
 	player.velocity = Vector2.ZERO # 进入 “准备射击” 状态后，玩家 速度 为0（玩家不能移动）
 	time_start_shot = Time.get_ticks_msec() # 进入 “准备射击” 状态后，开始计时 
+	shot_direction = player.heading 
 
 func _process(delta: float) -> void: 
 	shot_direction += KeyUtils.get_input_vector(player.control_scheme) * delta # 按下方向键后 的 玩家 按键时间
