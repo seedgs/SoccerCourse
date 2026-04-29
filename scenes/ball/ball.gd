@@ -53,8 +53,15 @@ func ball_state_animation() -> void:
 	else:
 		animation_player.play("idle") # 播放球的静止动画
 
-
-func shoot(shot_virection: Vector2) -> void:
-	velocity = shot_virection # 这里的 velocity 数值 其实就是  “player_state_shooting.gd” 的 “shoot_ball()” 方法的 state_data.shot_direction * state_data.shot_power 的数值！
+# 射球瞬间
+func shoot(shot_velocity: Vector2) -> void:
+	velocity = shot_velocity # 这里的 velocity 数值 其实就是  “player_state_shooting.gd” 的 “shoot_ball()” 方法的 state_data.shot_direction * state_data.shot_power 的数值！
 	carried = null # 当球射出去后， 携带者（触碰者）为 null（可以理解为在空中！）
 	switch_state(Ball.State.SHOT) # 转为 球的 射击状态，也就是转去 对应的 “ball_state_shot.gd”
+
+
+# 传球瞬间
+func pass_to(pass_velocity: Vector2) -> void:
+	velocity = pass_velocity
+	carried = null 
+	switch_state(Ball.State.FREEFORM)

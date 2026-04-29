@@ -10,6 +10,11 @@ func _enter_tree() -> void:
 func on_animation_complete() -> void:
 	var pass_target := find_teammate_in_view()
 	print(pass_target)
+	var target := Vector2(10, 10) # 设 传球目标已知
+	var pass_direction := ball.position.direction_to(target) # .direction_to() 归一化向量（具体可查“向量归一化”）
+	ball.pass_to(pass_direction * 300) # 这里 “300”不是理想值，需要根据推导公式求出理想值
+
+	print(pass_direction)
 	transition_state(Player.State.MOVING)
 
 
