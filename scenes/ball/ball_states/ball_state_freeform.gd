@@ -3,8 +3,7 @@ class_name BallStateFreeForm
 extends BallState
 
 const BOUNCINESS := 0.65
-const FRICTION_AIR := 3.5
-const FRICTION_GROUND := 250.0
+
 
 
 func _enter_tree() -> void:
@@ -13,16 +12,17 @@ func _enter_tree() -> void:
 func on_player_enter(body: Player) -> void:
 
 	# 记录谁拿球！（当前为玩家！！！）
-	ball.carried = body # 如果去掉这个，ball_state_carried.gd 中 “ball.position = ball.carried.position（当球为携带状态时，球 与 玩家的位置是一致的）” 检测不出 玩家，就会报错！！！
+	# 如果去掉这个，ball_state_carried.gd 中 “ball.position = ball.carried.position（当球为携带状态时，球 与 玩家的位置是一致的）” 检测不出 玩家，就会报错！！！
+	ball.carried = body 
 	
-	state_transition_requested.emit(Ball.State.CARRIED) # 发送 ball_state.gd里面的 “CARRIED”
- 
+	# 发送 ball_state.gd里面的 “CARRIED”
+	state_transition_requested.emit(Ball.State.CARRIED) 
 
 func _process(delta: float) -> void: 
 	set_ball_animation_from_velocity() # 球的 “自由状态” 需要处理动画切换问题
 
 	# 如果 球的高度大于 0 (ball.height > 0)，则 用 “FRICTION_AIR”，否则 用 “FRICTION_GROUND”
-	var friction := FRICTION_AIR if ball.height > 0 else FRICTION_GROUND
+	var friction := ball.friction_air if ball.height > 0 else ball.friction_ground
 
 	# 设 球的速度的取值范围是 0 - 若干时间 内的 阻力(friction) 数值
 	ball.velocity = ball.velocity.move_toward(Vector2.ZERO, friction * delta)

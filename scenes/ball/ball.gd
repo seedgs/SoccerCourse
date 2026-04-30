@@ -12,7 +12,9 @@ enum State {CARRIED, FREEFORM, SHOT} # 枚举 球 的状态
 
 @onready var animation_player : AnimationPlayer = %AnimationPlayer # 获取动画播放器的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
 
+@export var friction_air : float # 球在空中的摩擦力
 
+@export var friction_ground : float # 球在地面的摩擦力
 
 var carried : Player = null
 var current_state : BallState = null # 球当前状态的引用
@@ -55,13 +57,35 @@ func ball_state_animation() -> void:
 
 # 射球瞬间
 func shoot(shot_velocity: Vector2) -> void:
-	velocity = shot_velocity # 这里的 velocity 数值 其实就是  “player_state_shooting.gd” 的 “shoot_ball()” 方法的 state_data.shot_direction * state_data.shot_power 的数值！
-	carried = null # 当球射出去后， 携带者（触碰者）为 null（可以理解为在空中！）
-	switch_state(Ball.State.SHOT) # 转为 球的 射击状态，也就是转去 对应的 “ball_state_shot.gd”
+
+	# 这里的 velocity 数值 其实就是  “player_state_shooting.gd” 的 “shoot_ball()” 方法的 state_data.shot_direction * state_data.shot_power 的数值！
+	velocity = shot_velocity 
+
+	# 当球射出去后， 携带者（触碰者）为 null（可以理解为在空中！）
+	carried = null
+
+	# 转为 球的 射击状态，也就是转去 对应的 “ball_state_shot.gd”
+	switch_state(Ball.State.SHOT) 
 
 
 # 传球瞬间
-func pass_to(pass_velocity: Vector2) -> void:
-	velocity = pass_velocity
+func pass_to(destination: Vector2) -> void:
+
+	# .direction_to() 归一化向量（具体可查“向量归一化”）
+	var direction := position.direction_to(destination) # 传球方向 
+
+	# .distance_to()方法可以计算两个坐标轴间的距离
+	# 初始坐标为球在射出瞬间的坐标，结束坐标为 “target”坐标”
+	var distance := position.distance_to(destination) # 传球的距离 x
+
+	# 详情可查阅 “information_to_help_understand” 下的资料）
+	var intensity := sqrt(2 * distance * friction_ground) # 传球的距离 x
+	 
+	# “intensity”，其实就是球的初速度 v0
+	velocity = intensity * direction # 球的速度 = 球的初速度v0 * 球的方向
+
+	# 球被射出后，没有携带者，所以为 null
 	carried = null 
+
+	# 球 射出后,进入自由状态
 	switch_state(Ball.State.FREEFORM)

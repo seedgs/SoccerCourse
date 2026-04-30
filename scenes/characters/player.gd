@@ -20,9 +20,17 @@ enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING}
 
 @onready var teammate_detection_area : Area2D = %TeammateDetectionArea
 
+# 创建图片的 “控制角色” 的 字典索引
+const CONTROL_SCHEME_MAP : Dictionary = {
+	ControlScheme.CPU: preload("res://assets/art/props/cpu.png"),
+	ControlScheme.P1: preload("res://assets/art/props/1p.png"),
+	ControlScheme.P2: preload("res://assets/art/props/2p.png"),
+}
+
+@onready var control_sprite : Sprite2D = %ControlSprite
 
 var current_state: PlayerState = null # 玩家当前状态的引用
-
+	
 var heading := Vector2.RIGHT # 设 玩家的默认朝向为 右 
 
 var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory”， 并创建新实例
@@ -31,7 +39,8 @@ var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory�
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void: 
-	switch_state(State.MOVING)  
+	switch_state(State.MOVING)
+	set_control_texture()
 
 	
 
@@ -44,6 +53,7 @@ func _process(_delta: float) -> void: # ( )内的 “delta” 如果前面有 �
 	
 	flip_sprite()
 
+	set_sprite_visibility()
 
 
 func switch_state(state: Player.State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
@@ -84,10 +94,18 @@ func flip_sprite() -> void: # 人物转向
 	elif heading == Vector2.LEFT:
 		player_sprite.flip_h = true
 
+func set_sprite_visibility() -> void:
+
+	# 持球的玩家 或者 控制者 “不” 是 CPU的时候 玩家头顶的图片 “隐藏”！
+	# 也就是 玩家P1、P2显示头顶图片，CPU拿到球时也显示头顶图片！
+	control_sprite.visible = has_ball() or not control_scheme == ControlScheme.CPU
 
 func has_ball() -> bool: # 检查玩家是否持有球！
 	return ball.carried == self # 返回 “球” 的 “持有者” 也就是 “玩家自己”!
 
+func set_control_texture() -> void:
+	# 玩家头顶的子节点 “ControlSprite” 的 质地 “texture” 为 字典的 控制方案
+	control_sprite.texture = CONTROL_SCHEME_MAP[control_scheme]
 
 func on_animation_complete() -> void: # 这个方法在 父节点 Player 的 “AnimationPlayer” 子节点下的任意一个动画下 “插入关键帧” ！
 	if current_state != null: 

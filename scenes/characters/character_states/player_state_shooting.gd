@@ -7,7 +7,6 @@ func _enter_tree() -> void:
 	animation_player.play("kick")
 
 func on_animation_complete() -> void: # 玩家射门状态的 “脚本” 调用了 “PlayerState” 脚本的 "on_animation_complete()"方法
-	print("2323232323")
 	if player.control_scheme == Player.ControlScheme.CPU:
 		transition_state(Player.State.RECOVERING)
 	else:

@@ -4,17 +4,28 @@ extends PlayerState
 
 func _enter_tree() -> void:
 	animation_player.play("kick")
+	#animation_player.play("prep_kick")
 	player.velocity = Vector2.ZERO
 	
 
 func on_animation_complete() -> void:
 	var pass_target := find_teammate_in_view()
-	print(pass_target)
-	var target := Vector2(10, 10) # 设 传球目标已知
-	var pass_direction := ball.position.direction_to(target) # .direction_to() 归一化向量（具体可查“向量归一化”）
-	ball.pass_to(pass_direction * 300) # 这里 “300”不是理想值，需要根据推导公式求出理想值
 
-	print(pass_direction)
+	# 当 没有传球目标时
+	if pass_target == null:
+
+		# 球的目标 为 球的位置(其实就是原地)，但是！下面加了 数值 “50”，所以球的方向 是 在原地的基础上 横坐标 +50 
+		# 方向是：持球玩家(player.heading) 的 方向
+		# 需要在 “player.heading” 加一个速度 50，才能使球移动
+		ball.pass_to(ball.position + player.heading * 50)
+		print(ball.position)
+		print(ball.position + player.heading * 50)
+	else: # 如果有传球目标
+		
+		# 球的目标 为 视野最近 目标的位置，方向是：视野最近的目标的方向
+		# 这里 添加 “pass_target.velocity” 是 传球至玩家也有 摩擦力效果
+		ball.pass_to(pass_target.position + pass_target.velocity)
+
 	transition_state(Player.State.MOVING)
 
 
