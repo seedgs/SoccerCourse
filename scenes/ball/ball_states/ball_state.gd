@@ -49,3 +49,11 @@ func process_gravity(delta: float, bounciness : float =  0.0) -> void:
 				ball.height_velocity = -ball.height_velocity * bounciness # 这一次的 “ball.height_velocity”方向 等于 上一次的 “ball.height_velocity”的反方向  乘以  0.65(bounciness数值，该数值通过 ball_state_freeform.gd 设定！)
 				ball.velocity *= bounciness # 球的每次弹起来，下去！弹起来！下去 的速度为 bounciness = 0.65 (因为 ball.velocity 为 Vector2类型， bounciness为 float类型， 需要 *= 去划等，表示为 ball.velocity中的每个分量 (x, y) 分别乘以 bounciness数值)
 
+func move_and_bound(delta: float) -> void:
+
+	# .move_and_clooide()此方法会返回 一些参数（具体看详解）
+	# 我们需要这些参数，所以把他 声明，以便使用
+	var collision := ball.move_and_collide(ball.velocity * delta)
+	if collision != null: # 是否发生碰撞
+		ball.velocity = ball.velocity.bounce(collision.get_normal()) * ball.BOUNCINESS
+		ball.switch_state(Ball.State.FREEFORM)

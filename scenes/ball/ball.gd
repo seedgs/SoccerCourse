@@ -2,6 +2,8 @@ class_name Ball
 
 extends AnimatableBody2D # 继承自 AnimatableBody2D
 
+const BOUNCINESS := 0.65
+
 enum State {CARRIED, FREEFORM, SHOT} # 枚举 球 的状态
 
 @onready var player_direction_area : Area2D = %PlayerDetectionArea # 获取区域的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
@@ -89,3 +91,7 @@ func pass_to(destination: Vector2) -> void:
 
 	# 球 射出后,进入自由状态
 	switch_state(Ball.State.FREEFORM)
+
+
+func stop() -> void:
+	velocity = Vector2.ZERO

@@ -2,7 +2,7 @@ class_name BallStateFreeForm
 
 extends BallState
 
-const BOUNCINESS := 0.65
+
 
 
 
@@ -26,7 +26,8 @@ func _process(delta: float) -> void:
 
 	# 设 球的速度的取值范围是 0 - 若干时间 内的 阻力(friction) 数值
 	ball.velocity = ball.velocity.move_toward(Vector2.ZERO, friction * delta)
-	process_gravity(delta, BOUNCINESS) # 执行 过程中的重力方法（传参：delta 和 BOUNCINESS）
-	ball.move_and_collide(ball.velocity * delta) # 球移动！（自由状态下的球 也需要移动，类似于落地后受摩擦力，然后停下来）
+	process_gravity(delta, ball.BOUNCINESS) # 执行 过程中的重力方法（传参：delta 和 BOUNCINESS）
+	move_and_bound(delta) # move_and_collide()已经被 move_and_bound()方法所包含，所以里面的参数直接为 delta(增量)
+	#ball.move_and_collide(ball.velocity * delta) # 球移动！（自由状态下的球 也需要移动，类似于落地后受摩擦力，然后停下来）
 	#print(sprite_ball.position.y)
  

@@ -4,7 +4,7 @@ extends BallState
 
 const SHOT_SPRITE_BALL_SCALE_X := 0.8 # 球 x 方向的缩放数值
 const SHOT_SPRITE_BALL_SKEW := 270.0 # 球的 倾斜 数值
-const SHOT_SPRITE_BALL_POSITION_Y := 30.0 # 球 y 方向的位置数值
+const SHOT_SPRITE_BALL_POSITION_Y := 5.0 # 球 y 方向的位置数值
 const SHOT_SPRITE_SHADOW_SCALE_X := 0.5 # 球阴影 x 方向的缩放数值
 const SHOT_SPRITE_SHADOW_SCALE_Y := 0.7 # 球阴影 y 方向的缩放数值
 
@@ -39,7 +39,8 @@ func _process(delta: float) -> void:
 	if Time.get_ticks_msec() - ball_shot_finish_time > BALL_SHOT_DURATION: # 球在空中的飞行时间
 		state_transition_requested.emit(Ball.State.FREEFORM) # 球经过设定时间后， 恢复 “自由” 状态
 	else: # 球还没超过设定时间
-		ball.move_and_collide(ball.velocity * delta) # 球移动！ 球的移动速度为时间的增量
+		move_and_bound(delta) # move_and_collide()已经被 move_and_bound()方法所包含，所以里面的参数直接为 delta(增量)
+		#ball.move_and_collide(ball.velocity * delta) # 球移动！ 球的移动速度为时间的增量
 
 func _exit_tree() -> void: # 状态结束时， 球恢复原有状态
 	sprite_ball.scale.x = 1.0

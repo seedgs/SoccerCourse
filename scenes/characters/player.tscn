@@ -159,7 +159,7 @@ position = Vector2(4, 0)
 collision_layer = 2
 script = ExtResource("1_yewv4")
 speed = 150.0
-power = 70.0
+power = 150.0
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
@@ -195,6 +195,7 @@ collision_mask = 2
 monitorable = false
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TeammateDetectionArea"]
+visible = false
 position = Vector2(-4, 0)
 polygon = PackedVector2Array(0, -40, 280, -150, 330, -100, 330, 100, 280, 150, 0, 40)
 
