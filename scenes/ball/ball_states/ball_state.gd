@@ -54,6 +54,12 @@ func move_and_bound(delta: float) -> void:
 	# .move_and_clooide()此方法会返回 一些参数（具体看详解）
 	# 我们需要这些参数，所以把他 声明，以便使用
 	var collision := ball.move_and_collide(ball.velocity * delta)
-	if collision != null: # 是否发生碰撞
+	if collision != null: # 检查是否发生碰撞（检查球是否碰到门框）
 		ball.velocity = ball.velocity.bounce(collision.get_normal()) * ball.BOUNCINESS
-		ball.switch_state(Ball.State.FREEFORM)
+
+		# ball_state.gd为父类
+		# ball_state_shot.gd为子类
+		# 若修改 ball_state_shot.gd子类 的内容
+		# 可以 按照下面方法去写（self 为 父类 也就是本脚本）
+		if self is BallStateShot: # 这里修改的是 球 在碰到门框后，球反弹的效果
+			_exit_tree() # 也就是当球碰到门框后，球就不再形变，只有摩擦力！

@@ -2,21 +2,22 @@ class_name BallStateShot
 
 extends BallState
 
-const SHOT_SPRITE_BALL_SCALE_X := 0.8 # 球 x 方向的缩放数值
-const SHOT_SPRITE_BALL_SKEW := 270.0 # 球的 倾斜 数值
-const SHOT_SPRITE_BALL_POSITION_Y := 5.0 # 球 y 方向的位置数值
-const SHOT_SPRITE_SHADOW_SCALE_X := 0.5 # 球阴影 x 方向的缩放数值
-const SHOT_SPRITE_SHADOW_SCALE_Y := 0.7 # 球阴影 y 方向的缩放数值
+var SHOT_SPRITE_BALL_SCALE_X := 0.8 # 球 x 方向的缩放数值
+var SHOT_SPRITE_BALL_SKEW := 270.0 # 球的 倾斜 数值
+var SHOT_SPRITE_BALL_POSITION_Y := 5.0 # 球 y 方向的位置数值
+var SHOT_SPRITE_SHADOW_SCALE_X := 0.5 # 球阴影 x 方向的缩放数值
+var SHOT_SPRITE_SHADOW_SCALE_Y := 0.7 # 球阴影 y 方向的缩放数值
 
-const BALL_SHOT_DURATION := 1000.0
+const BALL_SHOT_DURATION := 800.0
 
 var ball_shot_finish_time = Time.get_ticks_msec()
+
 
 func _enter_tree() -> void:
 	set_ball_animation_from_velocity() # 球的动画播放方法
 	ball.height = SHOT_SPRITE_BALL_POSITION_Y # 球的高度等于 预设的垂直高度！
 	if ball.velocity.x > 0: # 当 朝右射门时
-		print(ball.velocity.x)
+
 		# 下面 “sprite_ball” 与 “sprite_shadow” 的参数需要在 “ball.gd” 与 “ball_state.gd” 下写入参数
 		sprite_ball.scale.x = -SHOT_SPRITE_BALL_SCALE_X 
 		sprite_ball.skew = -SHOT_SPRITE_BALL_SKEW
@@ -48,3 +49,4 @@ func _exit_tree() -> void: # 状态结束时， 球恢复原有状态
 	sprite_ball.position.y = 0
 	sprite_shadow.scale.x = 0
 	sprite_shadow.scale.y = 0
+
