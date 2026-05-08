@@ -49,12 +49,19 @@ func process_gravity(delta: float, bounciness : float =  0.0) -> void:
 				ball.height_velocity = -ball.height_velocity * bounciness # 这一次的 “ball.height_velocity”方向 等于 上一次的 “ball.height_velocity”的反方向  乘以  0.65(bounciness数值，该数值通过 ball_state_freeform.gd 设定！)
 				ball.velocity *= bounciness # 球的每次弹起来，下去！弹起来！下去 的速度为 bounciness = 0.65 (因为 ball.velocity 为 Vector2类型， bounciness为 float类型， 需要 *= 去划等，表示为 ball.velocity中的每个分量 (x, y) 分别乘以 bounciness数值)
 
+# 球触碰球门后反弹的方法
 func move_and_bound(delta: float) -> void:
 
 	# .move_and_clooide()此方法会返回 一些参数（具体看详解）
 	# 我们需要这些参数，所以把他 声明，以便使用
+	# .move_and_collide() 可以检测出碰撞体，并返回碰撞信息
 	var collision := ball.move_and_collide(ball.velocity * delta)
 	if collision != null: # 检查是否发生碰撞（检查球是否碰到门框）
+	
+		# .bounce() （计算反弹后的方向向量）返回从给定法线参数n定义的垂直于直线的直线“反弹”的向量。
+		# .get_normal() 获取碰撞表面的法线方向！
+		# 计算一个物体的反弹，1、要知道反弹的方向，2、要知道反弹的力度（初速度）
+		# .bounce()就是计算 初速度的，.get_normal()就是提供方向的！
 		ball.velocity = ball.velocity.bounce(collision.get_normal()) * ball.BOUNCINESS
 
 		# ball_state.gd为父类
@@ -62,4 +69,4 @@ func move_and_bound(delta: float) -> void:
 		# 若修改 ball_state_shot.gd子类 的内容
 		# 可以 按照下面方法去写（self 为 父类 也就是本脚本）
 		if self is BallStateShot: # 这里修改的是 球 在碰到门框后，球反弹的效果
-			_exit_tree() # 也就是当球碰到门框后，球就不再形变，只有摩擦力！
+			_exit_tree() # 也就是当球碰到门框后，球就不再形变，只有摩擦力！ 

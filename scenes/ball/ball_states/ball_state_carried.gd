@@ -6,7 +6,9 @@ func _enter_tree() -> void:
 	assert(carried != null) 
 
 
-const OFFSET_FORM_PLAYER := Vector2(12, 2) # 球在携带状态下的偏移量
+const OFFSET_FORM_PLAYER_RIGHT := Vector2(7, 2) # 球在携带状态下的偏移量
+
+const OFFSET_FORM_PLAYER_LEFT := Vector2(16, 2) # 球在携带状态下的偏移量
 
 const DRIBBLE_FREQUENCY := 15.0 # 振幅（左右摇摆的快慢）
 
@@ -33,4 +35,8 @@ func _process(delta: float) -> void:
 	# 代码 无法 判断 是 “谁” 拿到球， 就无法执行下面这 球跟随人的代码！！！
 	# 当玩家进入携带区域后， 球的位置就是人的位置（稍微在人的位置偏前一点点）
 	# ""carried.heading.x" 人物在左右移动时，保持 球 与 人物 同向
-	ball.position = ball.carried.position + Vector2(vx + carried.heading.x * OFFSET_FORM_PLAYER.x, OFFSET_FORM_PLAYER.y)
+
+	if ball.carried.heading == Vector2.RIGHT:
+		ball.position = ball.carried.position + Vector2(vx + carried.heading.x * OFFSET_FORM_PLAYER_RIGHT.x, OFFSET_FORM_PLAYER_RIGHT.y)
+	elif ball.carried.heading == Vector2.LEFT:
+		ball.position = ball.carried.position + Vector2(vx + carried.heading.x * OFFSET_FORM_PLAYER_LEFT.x, OFFSET_FORM_PLAYER_LEFT.y)
