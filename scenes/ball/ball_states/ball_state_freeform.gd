@@ -26,4 +26,9 @@ func _process(delta: float) -> void:
 	move_and_bound(delta) # move_and_collide()已经被 move_and_bound()方法所包含，所以里面的参数直接为 delta(增量)
 	#ball.move_and_collide(ball.velocity * delta) # 球移动！（自由状态下的球 也需要移动，类似于落地后受摩擦力，然后停下来）
 
- 
+# can_air_interact()方法只是单纯询问是否有进入当前状态
+# 当前状态 为 球的自由状态
+# 也就是说 是否有进入当 球的自由状态
+# 进入了 球的自由状态 就返回 “true”
+func can_air_interact() -> bool:
+	return true

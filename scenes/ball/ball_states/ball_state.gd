@@ -61,7 +61,7 @@ func move_and_bound(delta: float) -> void:
 		# .bounce() （计算反弹后的方向向量）返回从给定法线参数n定义的垂直于直线的直线“反弹”的向量。
 		# .get_normal() 获取碰撞表面的法线方向！
 		# 计算一个物体的反弹，1、要知道反弹的方向，2、要知道反弹的力度（初速度）
-		# .bounce()就是计算 初速度的，.get_normal()就是提供方向的！
+		# .bounce()就是计算 初速度的，.get_normal()就是提供方向的！  
 		ball.velocity = ball.velocity.bounce(collision.get_normal()) * ball.BOUNCINESS
 
 		# ball_state.gd为父类
@@ -70,3 +70,11 @@ func move_and_bound(delta: float) -> void:
 		# 可以 按照下面方法去写（self 为 父类 也就是本脚本）
 		if self is BallStateShot: # 这里修改的是 球 在碰到门框后，球反弹的效果
 			_exit_tree() # 也就是当球碰到门框后，球就不再形变，只有摩擦力！ 
+
+# can_air_interact()方法只是单纯询问是否有进入当前状态
+# 当前状态 为 球的默认状态
+# 也就是说 是否有进入当前 球的默认状态
+# 在不进入其他状态的时候，代码执行都是 进入球的默认状态
+# 也就是 返回 “false”
+func can_air_interact() -> bool:
+	return false

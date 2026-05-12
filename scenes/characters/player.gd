@@ -4,7 +4,16 @@ extends CharacterBody2D
  
 enum ControlScheme {CPU, P1, P2}
 
-enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING}
+enum State {
+	BICYCLE_KICK,
+	HEADER,
+	MOVING,
+	PASSING,
+	PREPPING_SHOT, 
+	RECOVERING,
+	SHOOTING, 
+	TACKLING,
+	VOLLEY_KICK,}
 
 @export var ball : Ball
 
@@ -20,6 +29,8 @@ enum State {MOVING, TACKLING, RECOVERING, PREPPING_SHOT, SHOOTING, PASSING}
 
 @onready var teammate_detection_area : Area2D = %TeammateDetectionArea
 
+@onready var ball_detection_area : Area2D = %BallDetectionArea
+
 # 创建图片的 “控制角色” 的 字典索引
 const CONTROL_SCHEME_MAP : Dictionary = {
 	ControlScheme.CPU: preload("res://assets/art/props/cpu.png"),
@@ -27,11 +38,17 @@ const CONTROL_SCHEME_MAP : Dictionary = {
 	ControlScheme.P2: preload("res://assets/art/props/2p.png"),
 }
 
+const GRAVITY := 8.0
+
 @onready var control_sprite : Sprite2D = %ControlSprite
 
 var current_state: PlayerState = null # 玩家当前状态的引用
 	
 var heading := Vector2.RIGHT # 设 玩家的默认朝向为 右 
+
+var height := 0.0
+
+var height_velocity := 0.0
 
 var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory”， 并创建新实例
 
@@ -45,26 +62,62 @@ func _ready() -> void:
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void: # ( )内的 “delta” 如果前面有 “_” 代表此方法的 “delta” 数值被使用，如果 “delta” 没被使用，“_” 应该被加上！
+func _process(delta: float) -> void: # ( )内的 “delta” 如果前面有 “_” 代表此方法的 “delta” 数值被使用，如果 “delta” 没被使用，“_” 应该被加上！
 
 	move_and_slide()
 
 	# player_direction()
+
+	process_gravity(delta)
 	
 	flip_sprite()
 
 	set_sprite_visibility()
 
 
-func switch_state(state: Player.State, state_data: PlayerStateData = PlayerStateData.new()) -> void:
+func switch_state(
+	state: Player.State, 
+	state_data: PlayerStateData = PlayerStateData.new()) -> void:
 	if current_state != null:
 		current_state.queue_free() # 现有状态存在就销毁它
 	current_state = state_factory.get_fresh_state(state) # 从“player_state_facyory”获取get_fresh_state() 方法，并传入状态
-	current_state.steup(animation_player, ball, self, state_data, teammate_detection_area) # (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
-	current_state.state_transition_requested.connect(switch_state.bind()) # 接收信号，并绑定
+	
+	 # (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
+	# 修改建议：这里有点长了，可以建立一个包含下面所有依赖项的对象，只需传递这个对象即可
+	current_state.steup(
+		animation_player, 
+		ball, 
+		ball_detection_area, 
+		self, 
+		state_data, 
+		teammate_detection_area)
+	
+	# 接收信号，并绑定
+	current_state.state_transition_requested.connect(switch_state.bind()) 
 	current_state.name = "PlayerStateMachine: " + str(state)
-	call_deferred("add_child", current_state) # 把 switch_state()添加为子对象，并延迟调用！
+
+	 # 把 switch_state()添加为子对象，并延迟调用！
+	call_deferred("add_child", current_state)
 		
+
+
+func process_gravity(delta) -> void:
+	if height > 0:
+
+		# 随时间持续 递减 GRAVITY（每秒减少GRAVITY数值）
+		# 并传入 height_velocity
+		height_velocity -= GRAVITY * delta
+
+		# 每秒减少GRAVITY数值 并递增
+		# 传入 height
+		# 第一次循环 递增 8，第二次循环 递增 0
+		height += height_velocity
+
+		if height <= 0:
+			height = 0
+	
+	# 玩家 下面的 阴影的位置 是 上升 height数值（也是就8px）
+	player_sprite.position = Vector2.UP * height
 
 
 func set_movement_animation() -> void: # 人物动画状态

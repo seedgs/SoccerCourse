@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://3bmm7635aae3"]
+[gd_scene load_steps=18 format=3 uid="uid://3bmm7635aae3"]
 
 [ext_resource type="Texture2D" uid="uid://ce308tkyk1ofu" path="res://assets/art/characters/soccer-player.png" id="1_rp718"]
 [ext_resource type="Script" uid="uid://7aq11pxwd11k" path="res://scenes/characters/player.gd" id="1_yewv4"]
@@ -18,6 +18,54 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_eojnx"]
+resource_name = "bycicle_kick"
+length = 4.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [36, 37, 38, 39]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_animation_complete"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_7vyk4"]
+resource_name = "header"
+length = 0.2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [24, 25]
 }
 
 [sub_resource type="Animation" id="Animation_rp718"]
@@ -139,23 +187,60 @@ tracks/0/keys = {
 "values": [30]
 }
 
+[sub_resource type="Animation" id="Animation_qgnko"]
+resource_name = "volley_kick"
+length = 0.3
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [49, 50]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_animation_complete"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_76oj4"]
 _data = {
 &"RESET": SubResource("Animation_yewv4"),
+&"bycicle_kick": SubResource("Animation_eojnx"),
+&"header": SubResource("Animation_7vyk4"),
 &"idle": SubResource("Animation_rp718"),
 &"kick": SubResource("Animation_6eyoc"),
 &"prep_kick": SubResource("Animation_kqtwu"),
 &"recover": SubResource("Animation_atpat"),
 &"run": SubResource("Animation_76oj4"),
-&"tackle": SubResource("Animation_dyp2m")
+&"tackle": SubResource("Animation_dyp2m"),
+&"volley_kick": SubResource("Animation_qgnko")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rp718"]
 radius = 3.0
-height = 14.0
+height = 10.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dyp2m"]
+radius = 6.0
+height = 20.0
 
 [node name="Player" type="CharacterBody2D"]
-position = Vector2(4, 0)
 collision_layer = 2
 script = ExtResource("1_yewv4")
 speed = 150.0
@@ -163,7 +248,6 @@ power = 150.0
 
 [node name="PlayerSprite" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(-4, 0)
 texture = ExtResource("1_rp718")
 centered = false
 offset = Vector2(-16, -32)
@@ -184,7 +268,7 @@ libraries = {
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-4, -3)
+position = Vector2(0, -2)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_rp718")
 
@@ -196,11 +280,20 @@ monitorable = false
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="TeammateDetectionArea"]
 visible = false
-position = Vector2(-4, 0)
 polygon = PackedVector2Array(0, -40, 280, -150, 330, -100, 330, 100, 280, 150, 0, 40)
 
 [node name="ShadowSprite" type="Sprite2D" parent="."]
-position = Vector2(-4, 0)
 texture = ExtResource("3_76oj4")
 centered = false
 offset = Vector2(-8, -15)
+
+[node name="BallDetectionArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BallDetectionArea"]
+position = Vector2(0, -8)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_dyp2m")

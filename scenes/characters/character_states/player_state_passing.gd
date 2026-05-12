@@ -18,8 +18,6 @@ func on_animation_complete() -> void:
 		# 方向是：持球玩家(player.heading) 的 方向
 		# 需要在 “player.heading” 加一个速度 50，才能使球移动
 		ball.pass_to(ball.position + player.heading * 50)
-		print(ball.position)
-		print(ball.position + player.heading * 50)
 	else: # 如果有传球目标
 		
 		# 球的目标 为 视野最近 目标的位置，方向是：视野最近的目标的方向

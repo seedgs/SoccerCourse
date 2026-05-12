@@ -44,9 +44,8 @@ func _process(delta: float) -> void:
 		#ball.move_and_collide(ball.velocity * delta) # 球移动！ 球的移动速度为时间的增量
 
 func _exit_tree() -> void: # 状态结束时， 球恢复原有状态
-	sprite_ball.scale.x = 1.0
+	sprite_ball.scale.x = 1
 	sprite_ball.skew = 0
 	sprite_ball.position.y = 0
 	sprite_shadow.scale.x = 0
 	sprite_shadow.scale.y = 0
-

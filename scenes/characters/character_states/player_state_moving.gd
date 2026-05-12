@@ -26,15 +26,37 @@ func handle_human_movement() -> void: #人物操控
 	if player.velocity != Vector2.ZERO:
 		teammate_detection_area.rotation = player.velocity.angle() 
 
-	if player.has_ball() and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.PASS):
-		transition_state(player.State.PASSING)
+	# 玩家持球
+	if player.has_ball():
 
-	# 如果 玩家 持球 且 按下 射门按钮，玩家 进入准备射门状态！
-	if player.has_ball() and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
-		transition_state(player.State.PREPPING_SHOT)
+		# 如果按下 传球按键
+		if KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.PASS):
+			
+			# 进入传球状态
+			transition_state(player.State.PASSING)
+
+		# 如果 射门按键
+		elif KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
+			
+			# 进入射门状态
+			transition_state(player.State.PREPPING_SHOT)
+
+	# can_air_intersct()方法是
+	# 为了检测玩家 是否是 射门或者携带状态
+	# 如果是 另一玩家可以 转入 凌空抽射 或者 投球状态
+	elif ball.can_air_intersct() and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
+		
+		# 当一名玩家处于 射门或者携带状态 和 按下射门按键后
+		# 另一名玩家 如果移动速度为 0 
+		if player.velocity == Vector2.ZERO: 
+			pass
+		else:
+
+			# 另一名玩家 在移动的过程中，执行投球动作
+			transition_state(Player.State.HEADER)
 
 
 	# 如果 玩家 速度不为 0 且 按下 铲球 按钮，玩家 进入 铲球状态！
-	if player.velocity != Vector2.ZERO and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
-		transition_state(Player.State.TACKLING)
+	#if player.velocity != Vector2.ZERO and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
+		#transition_state(Player.State.TACKLING)
  
