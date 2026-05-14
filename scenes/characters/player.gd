@@ -1,7 +1,7 @@
 class_name Player
 
 extends CharacterBody2D
- 
+
 enum ControlScheme {CPU, P1, P2}
 
 enum State {
@@ -82,7 +82,7 @@ func switch_state(
 		current_state.queue_free() # 现有状态存在就销毁它
 	current_state = state_factory.get_fresh_state(state) # 从“player_state_facyory”获取get_fresh_state() 方法，并传入状态
 	
-	 # (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
+	# (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
 	# 修改建议：这里有点长了，可以建立一个包含下面所有依赖项的对象，只需传递这个对象即可
 	current_state.steup(
 		animation_player, 
@@ -96,7 +96,7 @@ func switch_state(
 	current_state.state_transition_requested.connect(switch_state.bind()) 
 	current_state.name = "PlayerStateMachine: " + str(state)
 
-	 # 把 switch_state()添加为子对象，并延迟调用！
+	# 把 switch_state()添加为子对象，并延迟调用！
 	call_deferred("add_child", current_state)
 		
 

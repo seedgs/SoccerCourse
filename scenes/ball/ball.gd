@@ -91,8 +91,7 @@ func pass_to(destination: Vector2) -> void:
 	var distance := position.distance_to(destination) # 传球的距离
 
 	# 详情可查阅 “information_to_help_understand” 下的资料）
-	var intensity := sqrt(2 * distance * friction_ground) # 传球的初速
-	 
+	var intensity := sqrt(2 * distance * friction_ground) # 传球的初速	 
 	# “intensity”，其实就是球的初速度 v0
 	velocity = intensity * direction # 球的速度 = 球的初速度v0 * 球的方向
 

@@ -15,3 +15,6 @@ func set_shot_direction(direction: Vector2) -> PlayerStateData: # 设置 可传 
 func set_shot_power(power: float) -> PlayerStateData: # 设置 可传 “shot_power” 的方法，并传至 “PlayerStateData”，方便调用
 	shot_power = power
 	return self # 重要！固定写法（返回数据本身）
+	
+	
+	

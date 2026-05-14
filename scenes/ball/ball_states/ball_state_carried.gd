@@ -3,7 +3,17 @@ class_name BallStateCarried
 extends BallState
 
 func _enter_tree() -> void:
+
+	# 以下设置是为了传球后，玩家接球的
+	# 在球传到另一位玩家的时，
+	# 球 “高度” 为 0
+	# “速度” 为 0
+	# 球的 “精灵体” 的 “位置” 也为 0
+	# 也就是说 球不会发生偏移！
 	assert(carried != null) 
+	ball.height = 0
+	ball.height_velocity = 0
+	sprite_ball.position = Vector2.ZERO
 
 
 const OFFSET_FORM_PLAYER_RIGHT := Vector2(7, 2) # 球在携带状态下的偏移量
