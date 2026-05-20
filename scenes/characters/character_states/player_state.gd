@@ -7,13 +7,19 @@ signal state_transition_requested(
 	new_state: Player.State, 
 	State_data: PlayerStateData) # 发出一个 “状态” 信号！
 
+
+
 var animation_player : AnimationPlayer = null # 这里 “animation_player” 是一个引用，目的是通过 “animation_player”，可以直接访问“Player”父节点下的“AnimationPlayer”组件
+
+var own_goal : Goal = null
 
 var player : Player = null # 这里 “player” 是一个引用，目的是通过 “player”，可以直接访问player.gd脚本
 
 var state_data : PlayerStateData = PlayerStateData.new()
 
 var ball : Ball = null
+
+var target_goal : Goal = null
 
 var teammate_detection_area : Area2D = null
 
@@ -23,8 +29,10 @@ func steup(
 	context_animation_player: AnimationPlayer, 
 	context_ball: Ball, 
 	context_ball_detection_area: Area2D, 
+	context_own_goal: Goal,
 	context_player: Player, 
 	context_data: PlayerStateData, 
+	context_target_goal: Goal,
 	conetxt_teammate_detection_area: Area2D) -> void: # 创建一个设置方法（"setup()"），分别传入参数
 
 	animation_player = context_animation_player
@@ -32,10 +40,14 @@ func steup(
 	ball = context_ball
 
 	ball_detection_area = context_ball_detection_area
+	
+	own_goal = context_own_goal
 
 	player = context_player
 
 	state_data = context_data
+
+	target_goal = context_target_goal
 
 	teammate_detection_area = conetxt_teammate_detection_area
 

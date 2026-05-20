@@ -16,9 +16,6 @@ enum State {CARRIED, FREEFORM, SHOT} # 枚举 球 的状态
 @onready var animation_player : AnimationPlayer = %AnimationPlayer # 获取动画播放器的 “引用”（Godot引擎内需要设置“唯一名称访问”） 
 
 
-@export var air_connect_max_height : float
-
-@export var air_connect_min_height : float
 
 @export var friction_air : float # 球在空中的摩擦力
 
@@ -121,5 +118,7 @@ func can_air_intersct() -> bool:
 
 
 
-func can_air_connect() -> bool:
+func can_air_connect(air_connect_min_height: float, air_connect_max_height: float) -> bool:
+
+	# 球在空中的高度
 	return height <= air_connect_max_height and height >= air_connect_min_height 

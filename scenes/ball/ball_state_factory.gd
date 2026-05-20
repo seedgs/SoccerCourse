@@ -4,9 +4,9 @@ var states : Dictionary
 
 func _init() -> void:
 	states = {
-		  Ball.State.CARRIED: BallStateCarried,
-		  Ball.State.SHOT: BallStateShot,
-		  Ball.State.FREEFORM: BallStateFreeForm,
+		Ball.State.CARRIED: BallStateCarried,
+		Ball.State.SHOT: BallStateShot,
+		Ball.State.FREEFORM: BallStateFreeForm,
 	}
 
 

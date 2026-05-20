@@ -19,17 +19,24 @@ enum State {
 
 @export var control_scheme: ControlScheme # 角色控制归属选择（P1, P2, CPU）
 
-@export var speed: float # 玩家速度
+@export var own_goal : Goal
 
 @export var power: float # 角色射门的能力数值
 
+@export var speed: float # 玩家速度
+
+@export var target_goal : Goal
+
+
 @onready var animation_player: AnimationPlayer = %AnimationPlayer # 获取Player节点下的 AnimationPlayer节点
+
+@onready var ball_detection_area : Area2D = %BallDetectionArea
 
 @onready var player_sprite : Sprite2D = %PlayerSprite # player_sprite 被 “赋予” 节点 “Sprite”的 “2D”属性， 否则 player_sprite不可用
 
 @onready var teammate_detection_area : Area2D = %TeammateDetectionArea
 
-@onready var ball_detection_area : Area2D = %BallDetectionArea
+
 
 # 创建图片的 “控制角色” 的 字典索引
 const CONTROL_SCHEME_MAP : Dictionary = {
@@ -88,8 +95,10 @@ func switch_state(
 		animation_player, 
 		ball, 
 		ball_detection_area, 
+		own_goal,
 		self, 
 		state_data, 
+		target_goal,
 		teammate_detection_area)
 	
 	# 接收信号，并绑定

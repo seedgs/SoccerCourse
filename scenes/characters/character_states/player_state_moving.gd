@@ -1,6 +1,11 @@
 class_name PlayerStateMoving
 
+
+
 extends PlayerState # 继承玩家状态
+
+const BALL_HEIGHT_MIN := 10.0
+const BALL_HEIGHT_MAX := 30.0
 
 func _process(_delta: float) -> void:
 
@@ -43,15 +48,17 @@ func handle_human_movement() -> void: #人物操控
 
 	# can_air_intersct()方法是
 	# 为了检测玩家 是否是 射门或者携带状态
-	# 如果是 另一玩家可以 转入 凌空抽射 或者 投球状态
-	elif ball.can_air_intersct() and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
+	# 如果是 另一玩家可以 转入 凌空 ) and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
 		
 		# 当一名玩家处于 射门或者携带状态 和 按下射门按键后
 		# 另一名玩家 如果移动速度为 0 
+	elif ball.can_air_connect(BALL_HEIGHT_MIN, BALL_HEIGHT_MAX) and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
 		if player.velocity == Vector2.ZERO: 
-			pass
+			if is_facing_target_goal(): # 玩家面向目标
+				transition_state(Player.State.VOLLEY_KICK)
+			else: # 玩家面向己方球门
+				transition_state(Player.State.BICYCLE_KICK)
 		else:
-
 			# 另一名玩家 在移动的过程中，执行投球动作
 			transition_state(Player.State.HEADER)
 
@@ -59,4 +66,19 @@ func handle_human_movement() -> void: #人物操控
 	# 如果 玩家 速度不为 0 且 按下 铲球 按钮，玩家 进入 铲球状态！
 	#if player.velocity != Vector2.ZERO and KeyUtils.is_action_just_pressed(player.control_scheme, KeyUtils.Action.SHOOT):
 		#transition_state(Player.State.TACKLING)
- 
+func is_facing_target_goal() -> bool:
+
+	if target_goal == null:
+		return false
+	
+	# 玩家移动的方向向量（并归一化）
+	# 这里 不能使用 “player.position”（局部变量），需要使用 “global_position”（全局变量）
+	# 因为 在Godot里面，所有节点都是 局部变量，需要改换成全局变量
+	var direction_to_target_goal := player.global_position.direction_to(target_goal.global_position)
+
+	# 根据玩家移动的方向向量 与 玩家朝向的向量的 “点积” 
+	# 
+	# 得出的数值是 >0 还是 <0 
+	# 来判断此时的玩家是面朝  对方球门  还是  自己球门  
+	return player.heading.dot(direction_to_target_goal) > 0 # 这个点积设为 >0，也就是玩家面向目标
+	

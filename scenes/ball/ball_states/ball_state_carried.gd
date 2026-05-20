@@ -16,9 +16,9 @@ func _enter_tree() -> void:
 	sprite_ball.position = Vector2.ZERO
 
 
-const OFFSET_FORM_PLAYER_RIGHT := Vector2(7, 2) # 球在携带状态下的偏移量
+const OFFSET_FORM_PLAYER_RIGHT := Vector2(10, 2) # 球在携带状态下的偏移量
 
-const OFFSET_FORM_PLAYER_LEFT := Vector2(16, 2) # 球在携带状态下的偏移量
+const OFFSET_FORM_PLAYER_LEFT := Vector2(13, 2) # 球在携带状态下的偏移量
 
 const DRIBBLE_FREQUENCY := 15.0 # 振幅（左右摇摆的快慢）
 

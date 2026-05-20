@@ -45,3 +45,15 @@ collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopFram"]
 shape = SubResource("RectangleShape2D_0ivff")
+
+[node name="Targets" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="TopTarget" type="Node2D" parent="Targets"]
+position = Vector2(23, -58)
+
+[node name="MiddleTarget" type="Node2D" parent="Targets"]
+position = Vector2(21, -36)
+
+[node name="BottomTarget" type="Node2D" parent="Targets"]
+position = Vector2(19, -12)
