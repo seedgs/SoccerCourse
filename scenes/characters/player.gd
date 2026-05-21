@@ -6,6 +6,7 @@ enum ControlScheme {CPU, P1, P2}
 
 enum State {
 	BICYCLE_KICK,
+	CHEST_CONTROL,
 	HEADER,
 	MOVING,
 	PASSING,
@@ -44,6 +45,8 @@ const CONTROL_SCHEME_MAP : Dictionary = {
 	ControlScheme.P1: preload("res://assets/art/props/1p.png"),
 	ControlScheme.P2: preload("res://assets/art/props/2p.png"),
 }
+
+const BALL_CONTROL_HIGHT_MAX := 10.0
 
 const GRAVITY := 8.0
 
@@ -176,6 +179,12 @@ func on_animation_complete() -> void: # 这个方法在 父节点 Player 的 “
 		# 第二步：on_animation_complete()被 “PlayerState.gd” 监听！ 
 		# 第三步：“PlayerState.gd” 里的 “on_animation_complete()” 被调用的其他状态监听 并 重写内容！
 		current_state.on_animation_complete() 
+
+func control_ball() -> void:
+	if ball.height > BALL_CONTROL_HIGHT_MAX:
+		switch_state(Player.State.CHEST_CONTROL)
+
+
 
 # 这个方法的弊端就是，按下左右按键，系统无法判断是来自 “P1” 还是 “P2”
 # func player_direction() -> void: # 人物转向
