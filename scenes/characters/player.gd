@@ -4,6 +4,15 @@ extends CharacterBody2D
 
 enum ControlScheme {CPU, P1, P2}
 
+enum Role {GOALIS,
+		DEFENS,
+		MIDFIELD,
+		OFFENSE}
+		
+enum SkinColor{LIGHT,
+			MEDIUM,
+			DARK}
+
 enum State {
 	BICYCLE_KICK,
 	CHEST_CONTROL,
