@@ -62,12 +62,18 @@ const GRAVITY := 8.0
 @onready var control_sprite : Sprite2D = %ControlSprite
 
 var current_state: PlayerState = null # 玩家当前状态的引用
+
+var fullname := ""
 	
 var heading := Vector2.RIGHT # 设 玩家的默认朝向为 右 
 
 var height := 0.0
 
 var height_velocity := 0.0
+
+var role := Player.Role.MIDFIELD
+
+var skin_color := Player.SkinColor.MEDIUM
 
 var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory”， 并创建新实例
 
@@ -92,6 +98,28 @@ func _process(delta: float) -> void: # ( )内的 “delta” 如果前面有 “
 	flip_sprite()
 
 	set_sprite_visibility()
+	
+	
+# 在玩家脚本初始化，以方便调用	
+func initialize(context_postion: Vector2, 
+				context_ball: Ball, 
+				context_own_goal: Goal, 
+				context_target_goal: Goal, 
+				context_player_data: PlayerResources) -> void:
+	position = context_postion
+	ball = context_ball
+	own_goal = context_own_goal
+	target_goal = context_target_goal
+	speed = context_player_data.speed
+	power = context_player_data.power
+	role = context_player_data.role
+	skin_color = context_player_data.skin_color
+	fullname = context_player_data.full_name
+	
+	# 在 World场景中， 球场正中央位置坐标为 (0,0)，往左x数值越小，往右越大
+	# target_goal（不管主队还是客队）在球场左侧，target_goal.position.x < position.x,玩家面的朝向为右（RIGHT）
+	# target_goal（不管主队还是客队） 在球场右侧，target_goal.position.x > position.x,玩家面的朝朝向为右（LEFT）
+	heading = Vector2.LEFT if target_goal.position.x < position.x else Vector2.RIGHT
 
 
 func switch_state(

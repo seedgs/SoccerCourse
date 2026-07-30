@@ -23,8 +23,6 @@ func _init() -> void:
 	
 	
 	
-	
-	
 	### 以下为遍历数组并添加进最上级的  “squads” 中 ###
 	
 	# Json被成功解析后, 此时可通过json.data访问了
