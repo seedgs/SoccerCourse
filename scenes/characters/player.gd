@@ -55,11 +55,17 @@ const CONTROL_SCHEME_MAP : Dictionary = {
 	ControlScheme.P2: preload("res://assets/art/props/2p.png"),
 }
 
+const COUNTRIES := ["CANADA", "FRANCE", "ARGENTINA", "BRAZIL", "ENGLAND", "GERMANY", "ITALY", "SPAIN", "USA"]
+
 const BALL_CONTROL_HIGHT_MAX := 10.0
 
 const GRAVITY := 8.0
 
 @onready var control_sprite : Sprite2D = %ControlSprite
+
+
+# 默认为空字符串，空字符串就会直接引用  COUNTRIES里面的内容
+var country := ""
 
 var current_state: PlayerState = null # 玩家当前状态的引用
 
@@ -83,9 +89,10 @@ var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory�
 func _ready() -> void: 
 	switch_state(State.MOVING)
 	set_control_texture()
-
+	set_shader_properties()
 	
 
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void: # ( )内的 “delta” 如果前面有 “_” 代表此方法的 “delta” 数值被使用，如果 “delta” 没被使用，“_” 应该被加上！
 
@@ -100,12 +107,28 @@ func _process(delta: float) -> void: # ( )内的 “delta” 如果前面有 “
 	set_sprite_visibility()
 	
 	
+func set_shader_properties() -> void:	
+
+	var shader_material := player_sprite.material as ShaderMaterial
+	if shader_material == null:
+		push_warning("PlayerSprite material is not a ShaderMaterial.")
+		return
+	
+	
+	shader_material.set_shader_parameter("skin_color", int(skin_color))
+	var country_color := COUNTRIES.find(country)
+	country_color = clampi(country_color, 0, COUNTRIES.size() - 1)
+	shader_material.set_shader_parameter("team_color", int(country_color))
+	
+	
 # 在玩家脚本初始化，以方便调用	
 func initialize(context_postion: Vector2, 
 				context_ball: Ball, 
 				context_own_goal: Goal, 
 				context_target_goal: Goal, 
-				context_player_data: PlayerResources) -> void:
+				context_player_data: PlayerResources,
+				context_country: String,
+				) -> void:
 	position = context_postion
 	ball = context_ball
 	own_goal = context_own_goal
@@ -120,7 +143,11 @@ func initialize(context_postion: Vector2,
 	# target_goal（不管主队还是客队）在球场左侧，target_goal.position.x < position.x,玩家面的朝向为右（RIGHT）
 	# target_goal（不管主队还是客队） 在球场右侧，target_goal.position.x > position.x,玩家面的朝朝向为右（LEFT）
 	heading = Vector2.LEFT if target_goal.position.x < position.x else Vector2.RIGHT
-
+	country = context_country
+	
+	if is_node_ready():
+		set_shader_properties()
+	
 
 func switch_state(
 	state: Player.State, 

@@ -1,11 +1,28 @@
 shader_type canvas_item;
 
+
+group_uniforms Palettes;
 // 关键词 + 指定的类型 + 名称
+//球衣调色板
 uniform sampler2D team_palette;
 
-// 设置索引，目的给着色器指定 “行”的位置
-uniform int team_color;
+//肤色调色板
+uniform sampler2D skin_palette;
 
+
+
+group_uniforms;
+// 设置索引，目的给着色器指定 “行”的位置
+// 球衣的选行
+//  hint_enum()下拉列表选项，()内为选择内容，()内的 “字符串”在Godot中依然解析为 “整数 int”，从第一位 “0” 开始
+uniform int team_color : hint_enum("CANADA", "FRANCE", "ARGENTINA", "BRAZIL", "ENGLAND", "GERMANY", "ITALY", "SPAIN", "USA");
+
+// 肤色的选行
+// hint_enum()下拉列表选项，()内为选择内容
+uniform int skin_color : hint_enum("Light", "Medium", "Dark");
+
+
+ 
 
 //顶点着色器
 void vertex() {
@@ -24,6 +41,7 @@ vec2 px_to_uv(ivec2 pos, ivec2 tex_size){
         (float(pos[1]) + 0.5) / float(tex_size[1])
     );
 }
+
 
 //vec4 color:原始颜色
 //sampler2D palette:调色板
@@ -50,6 +68,7 @@ vec4 get_palette_color(vec4 color, sampler2D palette, int selection){
         vec4 color_ref = texture(palette, uv_color_ref);
         
         //查找颜色后，并替换
+        // (color == color_ref):我要使选择的行的颜色与遍历（第一行）的颜色完全一致（其实就是替换）
         if (color == color_ref){
         
             //搜索第一行的颜色，然后对比你所选的team_color中的数（因为你的get_palette_color()的selection对应的是team_color，也就是你选的行数）
@@ -67,7 +86,11 @@ vec4 get_palette_color(vec4 color, sampler2D palette, int selection){
 void fragment() {
     
     COLOR = get_palette_color(COLOR, team_palette, team_color);
-	
+    
+    //skin_color 在Godot面板中下拉列表为 “字符串”，但是Godot解析其依然为 “整数 int”
+	if (skin_color > 0){
+	    COLOR = get_palette_color(COLOR, skin_palette, skin_color);
+	}
 }
 
 

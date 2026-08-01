@@ -21,7 +21,7 @@ const PLAYER_PREFAB := preload("res://scenes/characters/player.tscn")
 func _ready() -> void:
 	spawn_players(team_home, goal_home)
 	spawns.scale.x = -1
-	spawn_players(team_home,goal_away)
+	spawn_players(team_away, goal_away)
 	
 	# 从玩家列表选择可控制的角色，[4]与[5]为前锋，并初始化
 	var player : Player = get_children().filter(func(p): return p is Player)[4]
@@ -54,7 +54,12 @@ func spawn_players(country: String, own_goal: Goal) -> void:
 		var player_data := players[i] as PlayerResources
 		
 		#把所有的数据都初始化至 plyer
-		var player := spawn_player(player_position, ball, own_goal,target_goal,player_data)
+		var player := spawn_player(player_position, 
+									ball, 
+									own_goal,
+									target_goal, 
+									player_data, 
+									country)
 		
 		#把player加载进场景子节点
 		add_child(player)
@@ -63,7 +68,9 @@ func spawn_player(player_postion: Vector2,
  				ball : Ball,
 				own_goal: Goal, 
 				target_goal: Goal, 
-				player_data: PlayerResources) -> Player:
+				player_data: PlayerResources,
+				country: String
+				) -> Player:
 	var player := PLAYER_PREFAB.instantiate()
-	player.initialize(player_postion, ball, own_goal, target_goal, player_data)
+	player.initialize(player_postion, ball, own_goal, target_goal, player_data, country)
 	return player		

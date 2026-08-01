@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://3bmm7635aae3"]
+[gd_scene load_steps=23 format=3 uid="uid://3bmm7635aae3"]
 
 [ext_resource type="Texture2D" uid="uid://ce308tkyk1ofu" path="res://assets/art/characters/soccer-player.png" id="1_rp718"]
 [ext_resource type="Script" uid="uid://7aq11pxwd11k" path="res://scenes/characters/player.gd" id="1_yewv4"]
@@ -6,11 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://ba5l4p1jceflk" path="res://assets/art/palettes/teams-color-palette.png" id="3_6eyoc"]
 [ext_resource type="Texture2D" uid="uid://d2bj533c3ksa6" path="res://assets/art/characters/player-shadow.png" id="3_76oj4"]
 [ext_resource type="Texture2D" uid="uid://cdcp3xt0torc5" path="res://assets/art/props/1p.png" id="3_dyp2m"]
+[ext_resource type="Texture2D" uid="uid://bn884jdmjn27b" path="res://assets/art/palettes/skin-colors-palette.png" id="3_eojnx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kqtwu"]
+resource_local_to_scene = true
 shader = ExtResource("2_kqtwu")
 shader_parameter/team_palette = ExtResource("3_6eyoc")
-shader_parameter/team_color = 6
+shader_parameter/skin_palette = ExtResource("3_eojnx")
+shader_parameter/team_color = 7
+shader_parameter/skin_color = 1
 
 [sub_resource type="Animation" id="Animation_yewv4"]
 length = 0.001
