@@ -7,7 +7,7 @@ signal state_transition_requested(
 	new_state: Player.State, 
 	State_data: PlayerStateData) # 发出一个 “状态” 信号！
 
-
+var ai_behavior : AIBehavior = null
 
 var animation_player : AnimationPlayer = null # 这里 “animation_player” 是一个引用，目的是通过 “animation_player”，可以直接访问“Player”父节点下的“AnimationPlayer”组件
 
@@ -33,7 +33,8 @@ func steup(
 	context_player: Player, 
 	context_data: PlayerStateData, 
 	context_target_goal: Goal,
-	conetxt_teammate_detection_area: Area2D) -> void: # 创建一个设置方法（"setup()"），分别传入参数
+	conetxt_teammate_detection_area: Area2D,
+	context_ai_behavior: AIBehavior) -> void: # 创建一个设置方法（"setup()"），分别传入参数
 
 	animation_player = context_animation_player
 
@@ -51,7 +52,7 @@ func steup(
 
 	teammate_detection_area = conetxt_teammate_detection_area
 
-	
+	ai_behavior = context_ai_behavior
 
 # 这个方法 可以使 “state_transition_requested.emit()” 直接变成 “trainsition_state()” 被调用
 # 这个方法也包括可以使用 “trainsition_state()” 内的参数，只要在 “signal state_transition_requested()” 内设置参数即可

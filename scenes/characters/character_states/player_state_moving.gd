@@ -11,7 +11,7 @@ func _process(_delta: float) -> void:
 
 	
 	if player.control_scheme == player.ControlScheme.CPU: 
-		pass  
+		ai_behavior.process_ai()  
 	else:
 		handle_human_movement()
 		

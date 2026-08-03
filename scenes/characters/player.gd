@@ -63,6 +63,7 @@ const GRAVITY := 8.0
 
 @onready var control_sprite : Sprite2D = %ControlSprite
 
+var ai_behavior : AIBehavior = AIBehavior.new()
 
 # 默认为空字符串，空字符串就会直接引用  COUNTRIES里面的内容
 var country := ""
@@ -90,7 +91,7 @@ func _ready() -> void:
 	switch_state(State.MOVING)
 	set_control_texture()
 	set_shader_properties()
-	
+	setup_ai_behavior()
 
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -113,7 +114,6 @@ func set_shader_properties() -> void:
 	if shader_material == null:
 		push_warning("PlayerSprite material is not a ShaderMaterial.")
 		return
-	
 	
 	shader_material.set_shader_parameter("skin_color", int(skin_color))
 	var country_color := COUNTRIES.find(country)
@@ -147,8 +147,12 @@ func initialize(context_postion: Vector2,
 	
 	if is_node_ready():
 		set_shader_properties()
-	
 
+func setup_ai_behavior() -> void:
+	ai_behavior.setup(self, ball)
+	ai_behavior.name = "AI Behavior"
+	add_child(ai_behavior)
+	
 func switch_state(
 	state: Player.State, 
 	state_data: PlayerStateData = PlayerStateData.new()) -> void:
@@ -158,7 +162,7 @@ func switch_state(
 	
 	# (传入的参数可以给依赖 “Player” 的脚本任意调用！！！)self为 player（传参的顺序按照 “player_state.gd” 的 “setup()” 传参顺序 ）
 	# 修改建议：这里有点长了，可以建立一个包含下面所有依赖项的对象，只需传递这个对象即可
-	current_state.steup(
+	current_state.steup( 
 		animation_player, 
 		ball, 
 		ball_detection_area, 
@@ -166,7 +170,8 @@ func switch_state(
 		self, 
 		state_data, 
 		target_goal,
-		teammate_detection_area)
+		teammate_detection_area,
+		ai_behavior)
 	
 	# 接收信号，并绑定
 	current_state.state_transition_requested.connect(switch_state.bind()) 
