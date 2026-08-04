@@ -4,14 +4,14 @@ extends CharacterBody2D
 
 enum ControlScheme {CPU, P1, P2}
 
-enum Role {GOALIS,
-		DEFENS,
-		MIDFIELD,
-		OFFENSE}
+enum Role {GOALIE,
+			DEFENS,
+			MIDFIELD,
+			OFFENSE}
 		
 enum SkinColor{LIGHT,
-			MEDIUM,
-			DARK}
+				MEDIUM,
+				DARK}
 
 enum State {
 	BICYCLE_KICK,
@@ -24,7 +24,8 @@ enum State {
 	SHOOTING, 
 	TACKLING,
 	VOLLEY_KICK,}
-
+	
+	
 @export var ball : Ball
 
 @export var control_scheme: ControlScheme # 角色控制归属选择（P1, P2, CPU）
@@ -37,6 +38,7 @@ enum State {
 
 @export var target_goal : Goal
 
+@export var total_steering_force_limit : float = 1.0 # 玩家转向力的设置
 
 @onready var animation_player: AnimationPlayer = %AnimationPlayer # 获取Player节点下的 AnimationPlayer节点
 
@@ -61,6 +63,8 @@ const BALL_CONTROL_HIGHT_MAX := 10.0
 
 const GRAVITY := 8.0
 
+const WALK_ANIM_THRESHOLD := 0.6
+
 @onready var control_sprite : Sprite2D = %ControlSprite
 
 var ai_behavior : AIBehavior = AIBehavior.new()
@@ -82,8 +86,11 @@ var role := Player.Role.MIDFIELD
 
 var skin_color := Player.SkinColor.MEDIUM
 
+var spawn_position := Vector2.ZERO # 存储玩家距离的变量
+
 var state_factory := PlayerStateFactory.new()  # 引用 “player_state_facyory”， 并创建新实例
 
+var weight_on_duty_steering := 0.0 # 权重变量（分配行动的优先级，范围（ 1,0 ））
 
 
 # Called when the node enters the scene tree for the first time.
@@ -92,7 +99,7 @@ func _ready() -> void:
 	set_control_texture()
 	set_shader_properties()
 	setup_ai_behavior()
-
+	spawn_position = position # 就绪的时候记录位置（玩家）
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void: # ( )内的 “delta” 如果前面有 “_” 代表此方法的 “delta” 数值被使用，如果 “delta” 没被使用，“_” 应该被加上！
@@ -148,6 +155,8 @@ func initialize(context_postion: Vector2,
 	if is_node_ready():
 		set_shader_properties()
 
+
+# 这个方法可以使ai_behavior.gd不需要挂载在player节点上也能调用ai_behavior.gd里面的方法
 func setup_ai_behavior() -> void:
 	ai_behavior.setup(self, ball)
 	ai_behavior.name = "AI Behavior"
@@ -202,12 +211,13 @@ func process_gravity(delta) -> void:
 
 
 func set_movement_animation() -> void: # 人物动画状态
-
-	if velocity.length() > 0:
-		animation_player.play("run")
-	else:
+	var vel_length := velocity.length()
+	if vel_length < 1:
 		animation_player.play("idle")
-
+	elif vel_length < speed * WALK_ANIM_THRESHOLD:
+		animation_player.play("walk")
+	else:
+		animation_player.play("run")
 
 
 
